@@ -38,17 +38,17 @@ Route::middleware(['auth'])->group(function () {
 
     // Crear personaje
     Route::get('/character/create', [CharacterController::class, 'create'])->name('character.create');
-    Route::post('/character', [CharacterController::class, 'store'])->name('character.store');
+    // Route::post('/character', [CharacterController::class, 'store'])->name('character.store');
     
     // Editar personaje
     Route::get('/character/{characterId}/edit', [CharacterController::class, 'edit'])->name('character.edit');
-    Route::put('/character/{characterId}', [CharacterController::class, 'update'])->name('character.update');
+    // Route::put('/character/{characterId}', [CharacterController::class, 'update'])->name('character.update');
     
     // Chatear con personaje
     Route::get('/chat/{characterId}', [ChatController::class, 'show'])->name('chat.show');
-    Route::post('/chat/{characterId}/message', [ChatController::class, 'sendMessage'])->name('chat.message');
+    // Route::post('/chat/{characterId}/message', [ChatController::class, 'sendMessage'])->name('chat.message');
     
     // Configuración de cuenta
     Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
-    Route::put('/settings', [ProfileController::class, 'updateSettings'])->name('settings.update');
+    // Route::put('/settings', [ProfileController::class, 'update'])->name('settings.update');
 });
