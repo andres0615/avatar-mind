@@ -23,9 +23,14 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+
+    axios.get('/sanctum/csrf-cookie').then(response => {
+        console.log('CSRF cookie set:', response);
+        form.post(route('login'), {
+            onFinish: () => form.reset('password'),
+        });
     });
+
 };
 </script>
 

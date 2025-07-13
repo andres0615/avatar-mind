@@ -5,34 +5,44 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Character;
+use App\Http\Requests\StoreCharacterRequest;
+use Illuminate\Http\JsonResponse;
 
 class CharacterApiController extends Controller
 {
     /**
      * Almacenar un nuevo personaje
      */
-    public function store(Request $request)
+    public function store(StoreCharacterRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'personality' => 'required|string',
-            'avatar' => 'nullable|image|max:2048',
-        ]);
+        try {
+            $character = Character::create([
+                'name' => $request->name,
+                'category' => $request->category,
+                'tagline' => $request->tagline,
+                'visibility' => $request->visibility ?? 'public',
+                'personality_description' => $request->personality_description,
+                'age' => $request->age,
+                'occupation' => $request->occupation,
+                'interests' => $request->interests,
+                'creativity_level' => $request->creativity_level ?? 7,
+                'response_length' => $request->response_length ?? 'medium',
+                'user_id' => auth()->id(),
+            ]);
 
-        $character = Character::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'personality' => $request->personality,
-            'user_id' => auth()->id(),
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Personaje creado exitosamente',
+                'data' => $character->load('user'),
+            ], 201);
 
-        if ($request->hasFile('avatar')) {
-            $character->avatar = $request->file('avatar')->store('avatars', 'public');
-            $character->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el personaje',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor',
+            ], 500);
         }
-
-        return redirect()->route('dashboard')->with('success', 'Personaje creado exitosamente');
     }
 
     /**
