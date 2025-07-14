@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCharacterRequest extends FormRequest
 {
+    // protected $stopOnFirstFailure = false;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,16 +23,16 @@ class StoreCharacterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'category' => 'nullable|in:Anime,Videojuegos,Películas,Libros,Histórico,Original',
-            'tagline' => 'nullable|string|max:100',
+            'category' => 'required|in:Anime,Videojuegos,Películas,Libros,Histórico,Original',
+            'tagline' => 'required|string|max:100',
             'visibility' => 'nullable|in:public,private,friends',
             'personality_description' => 'nullable|string|max:2000',
             'age' => 'nullable|string|max:50',
             'occupation' => 'nullable|string|max:255',
             'interests' => 'nullable|array|max:20', // Máximo 20 intereses
             'interests.*' => 'string|max:100|distinct', // Cada interés único
-            'creativity_level' => 'nullable|integer|min:1|max:10',
-            'response_length' => 'nullable|in:short,medium,long',
+            'creativity_level' => 'required|integer|min:1|max:10',
+            'response_length' => 'required|in:short,medium,long',
         ];
     }
 
@@ -42,7 +44,9 @@ class StoreCharacterRequest extends FormRequest
         return [
             'name.required' => 'El nombre del personaje es obligatorio.',
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'category.required' => 'La categoría es obligatoria.',
             'category.in' => 'La categoría debe ser una de: Anime, Videojuegos, Películas, Libros, Histórico, Original.',
+            'tagline.required' => 'La descripción corta es obligatoria.',
             'tagline.max' => 'La descripción corta no puede tener más de 100 caracteres.',
             'visibility.in' => 'La visibilidad debe ser: public, private o friends.',
             'personality_description.max' => 'La descripción de personalidad no puede tener más de 2000 caracteres.',

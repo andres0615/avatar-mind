@@ -7,11 +7,14 @@
 // import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 // import { Link } from '@inertiajs/vue3';
 import Sidebar from '@/Components/Sidebar/Sidebar.vue';
+import NotificationMessage from '@/Components/Layout/NotificationMessage.vue';
 
 // const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
+    <NotificationMessage/>
+
     <div class="flex h-screen">
         <Sidebar/>
 

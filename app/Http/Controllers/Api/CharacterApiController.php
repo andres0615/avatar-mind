@@ -13,7 +13,7 @@ class CharacterApiController extends Controller
     /**
      * Almacenar un nuevo personaje
      */
-    public function store(StoreCharacterRequest $request): JsonResponse
+    public function store(StoreCharacterRequest $request)
     {
         try {
             $character = Character::create([

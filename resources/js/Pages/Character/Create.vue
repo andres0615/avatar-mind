@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 
@@ -27,6 +27,15 @@ const interestsInput = ref('');
 // Manejar el slider de creatividad
 const creativityValue = ref(7);
 
+// Referencias a los campos del formulario
+const nameField = ref(null);
+const categoryField = ref(null);
+const taglineField = ref(null);
+const personalityField = ref(null);
+const ageField = ref(null);
+const occupationField = ref(null);
+const interestsField = ref(null);
+
 // Agregar interés
 const addInterest = () => {
     if (interestsInput.value.trim() && !interests.value.includes(interestsInput.value.trim())) {
@@ -48,22 +57,21 @@ const handleSubmit = async () => {
     errors.value = {};
 
     try {
-        const csrfToken = document.head.querySelector('meta[name="csrf-token"]');
-        console.log(csrfToken.content);
-        let config = {
-            /*headers: {
-                'X-CSRF-TOKEN': csrfToken ? csrfToken.content : '',
-            }*/
-        };
 
-        const response = await axios.post('/api/character', form.value, config);
+        let config = {};
+
+        let requestUrl = route('api.character.store');
+
+        const response = await axios.post(requestUrl, form.value, config);
 
         if (response.data.success) {
             console.log(response);
 
+            let redirectUrl = route('chat.show', { characterId: 1 });
+
             // Redirigir al dashboard o página de characters
-            router.visit('/dashboard', {
-                only: ['characters'],
+            router.visit(redirectUrl, {
+                // only: ['characters'],
                 preserveState: true,
                 onSuccess: () => {
                     // Mostrar mensaje de éxito si tienes un sistema de notificaciones
@@ -76,7 +84,12 @@ const handleSubmit = async () => {
     } catch (error) {
         // Manejar errores de validación (422) y otros errores
         if (error.response && error.response.status === 422) {
+            console.log(error);
             errors.value = error.response.data.errors;
+
+            // Focus en el primer campo con error
+            await nextTick();
+            focusFirstErrorField();
         } else if (error.response && error.response.data.message) {
             console.error('Error:', error.response.data.message);
         } else {
@@ -84,6 +97,30 @@ const handleSubmit = async () => {
         }
     } finally {
         isSubmitting.value = false;
+    }
+};
+
+const focusFirstErrorField = () => {
+    const errorFields = Object.keys(errors.value);
+    if (errorFields.length > 0) {
+        const firstErrorField = errorFields[0];
+        
+        // Mapeo de nombres de campos a referencias
+        const fieldRefs = {
+            name: nameField,
+            category: categoryField,
+            tagline: taglineField,
+            personality_description: personalityField,
+            age: ageField,
+            occupation: occupationField,
+            interests: interestsField
+        };
+        
+        const fieldRef = fieldRefs[firstErrorField];
+        if (fieldRef?.value) {
+            fieldRef.value.focus();
+            fieldRef.value.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }
 };
 
@@ -136,6 +173,7 @@ onMounted(() => {
                             class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                             placeholder="Ej: Naruto Uzumaki"
                             :class="{ 'border-red-500': errors.name }"
+                            ref="nameField"
                         >
                         <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name[0] }}</p>
                     </div>
@@ -145,6 +183,8 @@ onMounted(() => {
                         <select 
                             v-model="form.category"
                             class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            :class="{ 'border-red-500': errors.category }"
+                            ref="categoryField"
                         >
                             <option value="">Seleccionar categoría</option>
                             <option value="Anime">Anime</option>
@@ -167,11 +207,12 @@ onMounted(() => {
                         placeholder="Una breve descripción del personaje..." 
                         maxlength="100"
                         :class="{ 'border-red-500': errors.tagline }"
+                        ref="taglineField"
                     >
                     <p v-if="errors.tagline" class="text-red-500 text-sm mt-1">{{ errors.tagline[0] }}</p>
                 </div>
 
-                <div class="mt-6">
+                <!-- <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 mb-3">Visibilidad</label>
                     <div class="flex space-x-4">
                         <label class="flex items-center space-x-2 cursor-pointer">
@@ -196,7 +237,7 @@ onMounted(() => {
                             <span class="text-sm text-gray-700">Solo amigos</span>
                         </label>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <!-- Personalidad y Trasfondo -->
@@ -213,6 +254,7 @@ onMounted(() => {
                             placeholder="Describe la personalidad del personaje..." 
                             maxlength="2000"
                             :class="{ 'border-red-500': errors.personality_description }"
+                            ref="personalityField"
                         ></textarea>
                         <p v-if="errors.personality_description" class="text-red-500 text-sm mt-1">{{ errors.personality_description[0] }}</p>
                     </div>
@@ -226,6 +268,7 @@ onMounted(() => {
                                 class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                                 placeholder="Ej: 16 años"
                                 :class="{ 'border-red-500': errors.age }"
+                                ref="ageField"
                             >
                             <p v-if="errors.age" class="text-red-500 text-sm mt-1">{{ errors.age[0] }}</p>
                         </div>
@@ -238,6 +281,7 @@ onMounted(() => {
                                 class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                                 placeholder="Ej: Ninja"
                                 :class="{ 'border-red-500': errors.occupation }"
+                                ref="occupationField"
                             >
                             <p v-if="errors.occupation" class="text-red-500 text-sm mt-1">{{ errors.occupation[0] }}</p>
                         </div>
@@ -262,6 +306,8 @@ onMounted(() => {
                                 @blur="addInterest"
                                 class="flex-1 min-w-32 outline-none text-sm" 
                                 placeholder="Agregar interés..."
+                                id="interests-input"
+                                ref="interestsField"
                             >
                         </div>
                         <p v-if="errors.interests" class="text-red-500 text-sm mt-1">{{ errors.interests[0] }}</p>
