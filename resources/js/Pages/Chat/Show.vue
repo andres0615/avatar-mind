@@ -3,6 +3,32 @@ import ChatLayout from '@/Layouts/ChatLayout.vue';
 import ChatHeader from '@/Pages/Chat/Header.vue';
 import MessageReceived from '@/Components/Chat/MessageReceived.vue';
 import MessageSent from '@/Components/Chat/MessageSent.vue';
+import { onMounted, defineProps } from 'vue';
+// import { useNotifications } from '@/composables/useNotifications';
+
+const props = defineProps({
+//   responseNotification: {
+//     type: Object,
+//     required: false,
+//     default: {}
+//   },
+});
+
+// const { responseNotification } = props;
+
+// const { showNotification } = useNotifications();
+
+onMounted(() => {
+  // Si hay una notificación de respuesta, mostrarla
+//   console.log(responseNotification);
+//   if (responseNotification.message) {    
+//     console.log('Mostrando notificación:', responseNotification.message);
+//     console.log(responseNotification);
+//     showNotification(responseNotification.message, responseNotification.type);
+//   }
+
+});
+
 </script>
 
 <template>

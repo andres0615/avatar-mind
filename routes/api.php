@@ -18,8 +18,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Editar personaje
     Route::put('/character/{characterId}', [CharacterApiController::class, 'update'])->name('api.character.update');
     
-    // Chatear con personaje
-    Route::post('/chat/{characterId}/message', [ChatApiController::class, 'sendMessage'])->name('api.chat.message');
+    // Crear chat
+    Route::post('/chat/{characterId}', [ChatApiController::class, 'store'])->name('api.chat.store');
     
     // Configuración de cuenta
     Route::put('/settings', [ProfileApiController::class, 'update'])->name('api.settings.update');

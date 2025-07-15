@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, nextTick } from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
+import { useNotifications } from '@/composables/useNotifications';
 
 // Datos reactivos del formulario
 const form = ref({
@@ -36,6 +37,8 @@ const ageField = ref(null);
 const occupationField = ref(null);
 const interestsField = ref(null);
 
+const { showNotification } = useNotifications();
+
 // Agregar interés
 const addInterest = () => {
     if (interestsInput.value.trim() && !interests.value.includes(interestsInput.value.trim())) {
@@ -67,7 +70,16 @@ const handleSubmit = async () => {
         if (response.data.success) {
             console.log(response);
 
+            // Mostrar notificación de éxito
+            showNotification('Personaje creado exitosamente', 'success');
+
+            // let responseNotification = {
+            //     message: 'Personaje creado exitosamente',
+            //     type: 'success'
+            // };
+
             let redirectUrl = route('chat.show', { characterId: 1 });
+            console.log('Redirigiendo a:', redirectUrl);
 
             // Redirigir al dashboard o página de characters
             router.visit(redirectUrl, {
@@ -78,6 +90,16 @@ const handleSubmit = async () => {
                     console.log('Personaje creado exitosamente');
                 }
             });
+
+            // router.push({
+            //     url: redirectUrl,
+            //     component: 'Chat/Show',
+            //     props: { 
+            //         characterId: 1, 
+            //         responseNotification: responseNotification 
+            //     },
+            //     preserveState: true
+            // });
         } else {
             console.error('Error:', response.data.message);
         }

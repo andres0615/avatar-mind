@@ -2,8 +2,12 @@
 
 import { ref } from 'vue';
 
-const notificationMessage = ref('');
-const notificationType = ref(''); // 'error' or 'success'
+import { useNotifications } from '@/composables/useNotifications';
+
+// const notificationMessage = ref('');
+// const notificationType = ref(''); // 'error' or 'success'
+
+const { notification, hideNotification } = useNotifications();
 
 function getClassByType(type) {
     let notificationClass = 'bg-blue-500'; // Default class
@@ -22,8 +26,10 @@ function getClassByType(type) {
 </script>
 
 <template>
-    <div class="fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 hidden"  
-         :class="getClassByType(notificationType)">
-        {{ notificationMessage }}
+    <div class="fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50"  
+         :class="getClassByType(notification.type)"
+         v-if="notification.visible"
+         @click="hideNotification">
+        {{ notification.message }}
     </div>
 </template>

@@ -9,6 +9,12 @@ use App\Models\Character;
 
 class ChatApiController extends Controller
 {
+
+    public function store()
+    {
+        
+    }
+
     /**
      * Enviar un mensaje al personaje
      */
