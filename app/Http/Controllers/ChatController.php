@@ -12,7 +12,7 @@ class ChatController extends Controller
     /**
      * Mostrar la interfaz de chat con un personaje
      */
-    public function show(/*Character $character*/)
+    public function show(Request $request, int $characterId)
     {
         // Cargar los mensajes del chat para este personaje y usuario
         // $messages = ChatMessage::where('character_id', $character->id)
@@ -20,9 +20,8 @@ class ChatController extends Controller
         //     ->orderBy('created_at', 'asc')
         //     ->get();
 
-        return Inertia::render('Chat/Show'/*, [
-            'character' => $character,
-            'messages' => $messages
-        ]*/);
+        return Inertia::render('Chat/Show', [
+            'characterId' => $characterId,
+        ]);
     }
 }

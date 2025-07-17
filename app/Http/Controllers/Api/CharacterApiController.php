@@ -30,11 +30,19 @@ class CharacterApiController extends Controller
                 'user_id' => auth()->id(),
             ]);
 
-            return response()->json([
+            // Crear un chat asociado al personaje
+            $chat = $character->chats()->create();
+
+            $responseData = [
                 'success' => true,
                 'message' => 'Personaje creado exitosamente',
-                'data' => $character->load('user'),
-            ], 201);
+                'data' => [
+                    'character' => $character->load('user'),
+                    'chat' => $chat, // Incluir el chat creado
+                ]
+            ];
+
+            return response()->json($responseData, 201);
 
         } catch (\Exception $e) {
             return response()->json([

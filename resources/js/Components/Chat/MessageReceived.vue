@@ -1,4 +1,18 @@
 <script setup>
+import { defineProps } from 'vue';
+const props = defineProps({
+    message: {
+        type: String,
+        required: false,
+        default: 'test'
+    },
+    date: {
+        type: String,
+        required: false,
+        default: '00:00'
+    }
+});
+
 </script>
 
 <template>
@@ -10,11 +24,11 @@
                 </div>
                 <div>
                     <div class="px-4 py-3 rounded-2xl bg-gray-100 text-gray-900">
-                        <p class="text-sm leading-relaxed">¡Hola! Soy Naruto Uzumaki, el futuro Hokage. ¡Dattebayo! ¿En qué puedo ayudarte hoy?</p>
+                        <p class="text-sm leading-relaxed">{{ props.message }}</p>
                     </div>
-                    <div class="mt-1 text-left">
-                        <span class="text-xs text-gray-500">14:30</span>
-                    </div>
+                    <!-- <div class="mt-1 text-left">
+                        <span class="text-xs text-gray-500"> {{ date }}</span>
+                    </div> -->
                 </div>
             </div>
         </div>

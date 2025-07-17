@@ -67,23 +67,28 @@ const handleSubmit = async () => {
 
         const response = await axios.post(requestUrl, form.value, config);
 
-        if (response.data.success) {
+        let { success, message, data } = response.data;
+        let { character, chat } = data || {};
+
+        if (success) {
             console.log(response);
 
+            let characterId = character.id;
+            console.log('Personaje creado con ID:', characterId);
+
             // Mostrar notificación de éxito
-            showNotification('Personaje creado exitosamente', 'success');
+            showNotification(message, 'success');
 
             // let responseNotification = {
             //     message: 'Personaje creado exitosamente',
             //     type: 'success'
             // };
 
-            let redirectUrl = route('chat.show', { characterId: 1 });
+            let redirectUrl = route('chat.show', { characterId: characterId });
             console.log('Redirigiendo a:', redirectUrl);
 
             // Redirigir al dashboard o página de characters
             router.visit(redirectUrl, {
-                // only: ['characters'],
                 preserveState: true,
                 onSuccess: () => {
                     // Mostrar mensaje de éxito si tienes un sistema de notificaciones
@@ -91,17 +96,8 @@ const handleSubmit = async () => {
                 }
             });
 
-            // router.push({
-            //     url: redirectUrl,
-            //     component: 'Chat/Show',
-            //     props: { 
-            //         characterId: 1, 
-            //         responseNotification: responseNotification 
-            //     },
-            //     preserveState: true
-            // });
         } else {
-            console.error('Error:', response.data.message);
+            console.error('Error:', message);
         }
     } catch (error) {
         // Manejar errores de validación (422) y otros errores
