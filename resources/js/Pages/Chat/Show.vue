@@ -3,7 +3,7 @@ import ChatLayout from '@/Layouts/ChatLayout.vue';
 import ChatHeader from '@/Pages/Chat/Header.vue';
 import MessageReceived from '@/Components/Chat/MessageReceived.vue';
 import MessageSent from '@/Components/Chat/MessageSent.vue';
-import { onMounted, defineProps, ref, reactive } from 'vue';
+import { onMounted, defineProps, ref, reactive, nextTick } from 'vue';
 // import { useNotifications } from '@/composables/useNotifications';
 
 const props = defineProps({
@@ -26,11 +26,13 @@ const character = reactive({});
 
 const chatMessages = ref([]);
 
+const messagesScroll = ref(null);
+
 // const { responseNotification } = props;
 
 // const { showNotification } = useNotifications();
 
-onMounted(() => {
+onMounted(async () => {
 // Si hay una notificación de respuesta, mostrarla
 //   console.log(responseNotification);
 //   if (responseNotification.message) {    
@@ -39,7 +41,9 @@ onMounted(() => {
 //     showNotification(responseNotification.message, responseNotification.type);
 //   }
 
-    getChat();
+    await getChat();
+
+    scrollAlFinal();
 
 });
 
@@ -67,13 +71,24 @@ const getChat = async () => {
     }
 };
 
-const sendMessage = async () => {
+const sendMessage = async (event) => {
     console.log('Mensaje enviado:', userMessage.value);
+
+    if (event.key === 'Enter' && event.shiftKey) {
+        return; // Permitir nueva línea con Shift+Enter
+    }
+
+    if (!userMessage.value.trim()) {
+        console.warn('El mensaje está vacío');
+        return; // No enviar mensajes vacíos
+    }
 
     try {
 
         // Obtener hora actual en formato 'HH:ii'
         let currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        console.log('userMessage: ', userMessage.value);
 
         let newUserMessage = {
             message: userMessage.value,
@@ -93,6 +108,10 @@ const sendMessage = async () => {
         chatMessages.value.push(newUserMessage);
 
         userMessage.value = ''; // Limpiar el campo de entrada después de enviar
+
+        nextTick(() => {
+            scrollAlFinal(); // Desplazar al final después de agregar el nuevo mensaje
+        });
 
         const response = await axios.post(requestUrl, requestData, config);
 
@@ -118,6 +137,10 @@ const sendMessage = async () => {
             // Agregar respuesta del bot a los mensajes del chat
             chatMessages.value.push(newBotMessage);
 
+            nextTick(() => {
+                scrollAlFinal(); // Desplazar al final después de agregar el nuevo mensaje
+            });
+
         } else {
             console.error('Error:', message);
         }
@@ -129,6 +152,16 @@ const sendMessage = async () => {
     }
 }
 
+const scrollAlFinal = async () => {
+    const el = messagesScroll.value;
+    // console.log('scrollAlFinal', el);
+    // console.log('clientHeight:', el.clientHeight);
+    nextTick();
+    if (!el) return
+    // pon el scroll en la altura máxima
+    el.scrollTop = el.scrollHeight;
+}
+
 </script>
 
 <template>
@@ -137,7 +170,9 @@ const sendMessage = async () => {
             <ChatHeader />
 
             <!-- Área de Mensajes -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-6" id="messages-container">
+            <div class="flex-1 overflow-y-auto p-6 space-y-6" 
+            id="messages-container"
+            ref="messagesScroll">
 
                 <!-- <MessageSent /> -->
 
@@ -168,14 +203,15 @@ const sendMessage = async () => {
                             placeholder="Escribe tu mensaje..." 
                             id="message-input" 
                             style="min-height: 3rem; max-height: 8rem;"
-                            v-model="userMessage"></textarea>
+                            v-model="userMessage"
+                            @keyup.enter="sendMessage($event)"></textarea>
                             <div class="absolute bottom-2 right-2 text-xs text-gray-400" id="char-counter">0/2000</div>
                         </div>
                     </div>
                     <button 
                     class="p-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-colors" 
                     id="send-button"
-                    @click="sendMessage">
+                    @click="sendMessage($event)">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                         </svg>
