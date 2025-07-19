@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
+USE Illuminate\Support\Facades\Log;
 
 class ChatMessage extends Model
 {
@@ -27,6 +28,7 @@ class ChatMessage extends Model
         'chat_id',
         'bot_response',
         'message',
+        'time_ago',
     ];
 
     /**
@@ -35,10 +37,12 @@ class ChatMessage extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'created_at' => 'datetime:H:i',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'bot_response' => 'boolean',
     ];
+
+    protected $appends = ['time_ago']; // Para que aparezca en toArray()/toJson()
 
     // =================================
     // RELACIONES
@@ -102,11 +106,36 @@ class ChatMessage extends Model
         return $botMessage;
     }
 
-    /**
-     * Devuelve created_at formateado como 'HH:ii'
-     */
-    public function getCreatedAtAttribute($value): string
+    // =================================
+    // ACCESSORS
+    // =================================
+
+    public function getTimeAgoAttribute(): string
     {
-        return Carbon::parse($value)->format('H:i');
+        $now = new \DateTime();
+        $messageDate = new \DateTime($this->created_at);
+        $messageAgo = $now->diff($messageDate);
+        // Log::info(json_encode($messageAgo));
+
+        if ($messageAgo->y > 0) {
+            $unit = ($messageAgo->y > 1) ? 'años' : 'año';
+            $messageAgo = 'hace ' . $messageAgo->y . ' ' . $unit;
+        } elseif ($messageAgo->m > 0) {
+            $unit = ($messageAgo->m > 1) ? 'meses' : 'mes';
+            $messageAgo = 'hace ' . $messageAgo->m . ' ' . $unit;
+        } elseif ($messageAgo->d > 0) {
+            $unit = ($messageAgo->d > 1) ? 'días' : 'día';
+            $messageAgo = 'hace ' . $messageAgo->d . ' ' . $unit;
+        } elseif ($messageAgo->h > 0) {
+            $unit = ($messageAgo->h > 1) ? 'horas' : 'hora';
+            $messageAgo = 'hace ' . $messageAgo->h . ' ' . $unit;
+        } elseif ($messageAgo->i > 0) {
+            $unit = ($messageAgo->i > 1) ? 'minutos' : 'minuto';
+            $messageAgo = 'hace ' . $messageAgo->i . ' ' . $unit;
+        } else {
+            $messageAgo = "justo ahora";
+        }
+
+        return $messageAgo;
     }
 }

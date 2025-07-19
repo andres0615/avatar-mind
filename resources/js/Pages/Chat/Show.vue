@@ -189,6 +189,8 @@ const scrollAlFinal = async () => {
                     :message="chatMessage.message" 
                     :date="chatMessage.created_at" />
 
+                    <!-- Componente thinking -->
+
                 </template>
             </div>
 

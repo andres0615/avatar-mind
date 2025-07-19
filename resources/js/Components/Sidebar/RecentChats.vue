@@ -1,5 +1,46 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { onMounted, defineProps, ref, reactive, nextTick } from 'vue';
+
+const characters = ref([]);
+
+onMounted(async () => {
+    await getRecentChats();
+});
+
+const getRecentChats = async () => {
+    try {
+        let config = {};
+        let requestUrl = route('api.character.index');
+
+        const response = await axios.get(requestUrl, config);
+        let { success, message, data: responseData } = response.data;
+
+        if (success) {
+            console.log('Recent chats obtained:', responseData);
+            // Aquí puedes manejar los datos obtenidos, por ejemplo, guardarlos en una variable reactiva
+
+            characters.value = responseData.characters;
+        } else {
+            console.error('Error fetching recent chats:', message);
+        }
+
+    } catch (error) {
+        console.error('Error al obtener los mensajes:', error);
+    }
+}
+
+const getTimeAgo = (character) => {
+    return character.chat.last_message.time_ago;
+}
+
+const getNameInitial = (name) => {
+    if (!name) return '';
+    const parts = name.split(' ');
+    if (parts.length === 0) return '';
+    return parts[0].charAt(0).toUpperCase();
+}
+
 </script>
 
 <template>
@@ -16,7 +57,7 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <div class="space-y-2" id="recent-chats">
-            <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+            <!-- <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                 <Link class="flex items-center space-x-3"
                 :href="route('chat.show', { characterId: 1 })">
                     <div class="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center">
@@ -27,52 +68,19 @@ import { Link } from '@inertiajs/vue3';
                         <p class="text-xs text-gray-500">2 min ago</p>
                     </div>
                 </Link>
-            </div>
-            <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+            </div> -->
+            <div 
+            v-for="character in characters"
+            :key="character.id"
+            class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                 <Link class="flex items-center space-x-3"
-                :href="route('chat.show', { characterId: 2 })">
+                :href="route('chat.show', { characterId: character.id })">
                     <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                        <span class="text-xs font-medium text-white">H</span>
+                        <span class="text-xs font-medium text-white">{{ getNameInitial(character.name) }}</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">Hermione Granger</p>
-                        <p class="text-xs text-gray-500">1 hour ago</p>
-                    </div>
-                </Link>
-            </div>
-            <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <Link class="flex items-center space-x-3"
-                :href="route('chat.show', { characterId: 2 })">
-                    <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                        <span class="text-xs font-medium text-white">H</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">Hermione Granger</p>
-                        <p class="text-xs text-gray-500">1 hour ago</p>
-                    </div>
-                </Link>
-            </div>
-            <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <Link class="flex items-center space-x-3"
-                :href="route('chat.show', { characterId: 2 })">
-                    <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                        <span class="text-xs font-medium text-white">H</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">Hermione Granger</p>
-                        <p class="text-xs text-gray-500">1 hour ago</p>
-                    </div>
-                </Link>
-            </div>
-            <div class="p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                <Link class="flex items-center space-x-3"
-                :href="route('chat.show', { characterId: 2 })">
-                    <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                        <span class="text-xs font-medium text-white">H</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">Hermione Granger</p>
-                        <p class="text-xs text-gray-500">1 hour ago</p>
+                        <p class="text-sm font-medium text-gray-900 truncate">{{ character.name }}</p>
+                        <p class="text-xs text-gray-500">{{ getTimeAgo(character) }}</p>
                     </div>
                 </Link>
             </div>

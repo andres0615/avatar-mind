@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Chat extends Model
 {
@@ -33,7 +34,7 @@ class Chat extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'created_at' => 'datetime',
+        'created_at' => 'datetime:H:i',
         'updated_at' => 'datetime',
     ];
 
@@ -55,5 +56,15 @@ class Chat extends Model
     public function messages(): HasMany
     {
         return $this->hasMany(ChatMessage::class);
+    }
+
+    // Obtener el último mensaje del chat
+    public function lastMessage()
+    {
+        return $this->hasOne(ChatMessage::class)->latestOfMany();
+        // ->latestOfMany()
+        // ->select(['*'])
+        // // Calcular el tiempo transcurrido desde el último mensaje
+        // ->selectRaw("TIMESTAMPDIFF(SECOND, created_at, NOW()) as time_ago");
     }
 }

@@ -6,10 +6,33 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Character;
 use App\Http\Requests\StoreCharacterRequest;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class CharacterApiController extends Controller
 {
+    public function index()
+    {
+        // Aquí iría la lógica para listar los chats del usuario autenticado
+        // Por ejemplo, obtener todos los chats asociados al usuario autenticado
+
+        $characters = auth()->user()
+                    ->characters()
+                    ->with('chat.lastMessage')
+                    ->get();
+
+        $responseData = [
+            'success' => true,
+            'message' => 'Chats retrieved successfully',
+            'data' => [
+                'characters' => $characters,
+            ], // Cargar la relación character si es necesario
+        ];
+
+        return response()->json($responseData, 200);
+    }
+
     /**
      * Almacenar un nuevo personaje
      */
@@ -31,7 +54,11 @@ class CharacterApiController extends Controller
             ]);
 
             // Crear un chat asociado al personaje
-            $chat = $character->chats()->create();
+            $chat = $character->chat()->create();
+            $chatMessage = $chat->messages()->create([
+                'message' => "Hola, soy {$character->name}. ¿Cómo puedo ayudarte hoy?",
+                'bot_response' => true,
+            ]);
 
             $responseData = [
                 'success' => true,

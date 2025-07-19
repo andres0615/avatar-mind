@@ -13,6 +13,9 @@ Route::get('/user', function (Request $request) {
 
 // Rutas API con autenticación
 Route::middleware(['auth:sanctum'])->group(function () {
+    // Listar chats
+    Route::get('/character', [CharacterApiController::class, 'index'])->name('api.character.index');
+
     // Crear personaje
     Route::post('/character', [CharacterApiController::class, 'store'])->name('api.character.store');
     
@@ -21,7 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Crear chat
     // Route::post('/chat/{characterId}', [ChatApiController::class, 'store'])->name('api.chat.store');
-
+    
     // Obtener chat 
     Route::get('/chat/{characterId}', [ChatApiController::class, 'show'])->name('api.chat.show');
     

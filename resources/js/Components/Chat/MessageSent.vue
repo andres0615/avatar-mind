@@ -15,7 +15,7 @@ const props = defineProps({
 
 onMounted(() => {
     // Aquí puedes agregar lógica que necesites al montar el componente
-    console.log('MessageSent component mounted with message:', props.message);
+    // console.log('MessageSent component mounted with message:', props.message);
 });
 
 </script>

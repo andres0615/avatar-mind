@@ -10,7 +10,6 @@ use App\Models\Character;
 
 class ChatApiController extends Controller
 {
-
     public function store()
     {
         
