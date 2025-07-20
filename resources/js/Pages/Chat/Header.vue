@@ -1,5 +1,24 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+
+const props = defineProps({
+    character: {
+        type: Object,
+        required: true,
+        default: () => ({
+            name: '',
+            tagline: '',
+        })
+    }
+});
+
+const getNameInitial = (name) => {
+    if (!name) return '';
+    const parts = name.split(' ');
+    if (parts.length === 0) return '';
+    return parts[0].charAt(0).toUpperCase();
+}
+
 </script>
 
 <template>
@@ -7,11 +26,11 @@ import { Link } from '@inertiajs/vue3';
     <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
         <div class="flex items-center space-x-4">
             <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
-                <span class="text-lg font-bold text-white">N</span>
+                <span class="text-lg font-bold text-white">{{ getNameInitial(props.character.name) }}</span>
             </div>
             <div>
-                <h1 class="text-xl font-semibold text-gray-900">Naruto Uzumaki</h1>
-                <p class="text-sm text-gray-500">El ninja que nunca se rinde</p>
+                <h1 class="text-xl font-semibold text-gray-900">{{ props.character.name }}</h1>
+                <p class="text-sm text-gray-500">{{ props.character.tagline }}</p>
             </div>
         </div>
 

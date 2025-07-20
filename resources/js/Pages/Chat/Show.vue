@@ -7,11 +7,6 @@ import { onMounted, defineProps, ref, reactive, nextTick } from 'vue';
 // import { useNotifications } from '@/composables/useNotifications';
 
 const props = defineProps({
-//   responseNotification: {
-//     type: Object,
-//     required: false,
-//     default: {}
-//   },
     characterId: {
         type: Number,
         required: true
@@ -167,7 +162,7 @@ const scrollAlFinal = async () => {
 <template>
     <ChatLayout>
         <main class="flex-1 flex flex-col bg-white">
-            <ChatHeader />
+            <ChatHeader :character="character.value" />
 
             <!-- Área de Mensajes -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6" 
@@ -183,7 +178,8 @@ const scrollAlFinal = async () => {
                     <MessageReceived 
                     v-if="chatMessage.bot_response" 
                     :message="chatMessage.message" 
-                    :date="chatMessage.created_at" />
+                    :date="chatMessage.created_at"
+                    :character="character.value" />
 
                     <MessageSent v-else 
                     :message="chatMessage.message" 
