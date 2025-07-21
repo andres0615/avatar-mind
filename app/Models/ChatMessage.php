@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
-USE Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
+use App\Services\GroqService;
+
 
 class ChatMessage extends Model
 {
@@ -61,6 +63,11 @@ class ChatMessage extends Model
         return $this->bot_response;
     }
 
+    protected function groqService()
+    {
+        return app(GroqService::class);
+    }
+
     public function storeUserMessage($chatId, $requestData)
     {
         // Crear el nuevo mensaje de chat del usuario
@@ -69,7 +76,8 @@ class ChatMessage extends Model
             'message' => $requestData['message'],
         ]);
 
-        $botResponse = $this->generateBotResponse($chatId, $requestData['message']);
+        // generar respuesta del bot
+        $botResponse = $newMessage->generateBotResponse();
 
         $responseData = [
             'success' => true,
@@ -83,26 +91,19 @@ class ChatMessage extends Model
         return $responseData;
     }
 
-    public function generateBotResponse($chatId, $message)
+    public function generateBotResponse()
     {
-        // Aquí puedes implementar la lógica para generar una respuesta del bot
-        // Por ejemplo, usando una API de IA o lógica personalizada
-        $botResponse = "Hola ya recibi tu mensaje"; // Placeholder
+        $botResponse = $this->groqService()->generateBotResponse($this->message);
+        // Log::info($botResponse);
 
-        $botMessage = $this->storeBotResponse($chatId, $botResponse);
+        $chat = $this->chat;
+        // Log::info($chat);
 
-        return $botMessage;
-    }
-
-    public function storeBotResponse($chatId, $message)
-    {
-        // Crear el nuevo mensaje de respuesta del bot
-        $botMessage = self::create([
-            'chat_id' => $chatId,
+        $botMessage = $chat->messages()->create([
             'bot_response' => true,
-            'message' => $message,
+            'message' => $botResponse,
         ]);
-        
+
         return $botMessage;
     }
 

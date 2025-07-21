@@ -43,7 +43,7 @@ const getNameInitial = (name) => {
                 </div>
                 <div>
                     <div class="px-4 py-3 rounded-2xl bg-gray-100 text-gray-900">
-                        <p class="text-sm leading-relaxed">{{ props.message }}</p>
+                        <p class="text-sm leading-relaxed whitespace-pre-wrap">{{ props.message }}</p>
                     </div>
                     <!-- <div class="mt-1 text-left">
                         <span class="text-xs text-gray-500"> {{ date }}</span>
