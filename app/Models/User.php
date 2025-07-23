@@ -53,6 +53,7 @@ class User extends Authenticatable
 
     /**
      * Get the characters for the user.
+     * @return HasMany<Character>
      */
     public function characters(): HasMany
     {

@@ -79,6 +79,9 @@ class ChatMessage extends Model
         // generar respuesta del bot
         $botResponse = $newMessage->generateBotResponse();
 
+        $chat = $newMessage->chat;
+        $chat->touch(); // Actualizar la marca de tiempo del chat
+
         $responseData = [
             'success' => true,
             'message' => 'Mensaje creado exitosamente',

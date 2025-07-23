@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Services\CharacterService;
+use App\Models\User;
+use Illuminate\Support\Collection;
 
 class CharacterApiController extends Controller
 {
@@ -25,10 +27,16 @@ class CharacterApiController extends Controller
         // Aquí iría la lógica para listar los chats del usuario autenticado
         // Por ejemplo, obtener todos los chats asociados al usuario autenticado
 
-        $characters = auth()->user()
+        /** @var User $user */
+        $user = auth()->user();
+
+        /** @var Collection $characters */
+        $characters = $user
                     ->characters()
                     ->with('chat.lastMessage')
                     ->get();
+
+        $characters = $characters->sortByDesc('chat.updated_at')->values();
 
         $responseData = [
             'success' => true,
