@@ -93,7 +93,7 @@ class ChatMessage extends Model
 
     public function generateBotResponse()
     {
-        $botResponse = $this->groqService()->generateBotResponse($this->message);
+        $botResponse = $this->groqService()->generateBotResponse($this);
         // Log::info($botResponse);
 
         $chat = $this->chat;

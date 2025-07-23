@@ -66,6 +66,8 @@ class Character extends Model
         ];
     }
 
+    protected $appends = ['max_tokens', 'temperature'];
+
     // =================================
     // RELACIONES
     // =================================
@@ -136,6 +138,25 @@ class Character extends Model
         }
         
         return implode(', ', $this->interests);
+    }
+
+    public function getMaxTokensAttribute(): int
+    {
+        switch ($this->response_length) {
+            case 'short':
+                return 100; // Máximo tokens para respuestas cortas
+            case 'medium':
+                return 200; // Máximo tokens para respuestas medianas
+            case 'long':
+                return 300; // Máximo tokens para respuestas largas
+            default:
+                return 200; // Valor por defecto si no se especifica
+        }
+    }
+
+    public function getTemperatureAttribute(): int
+    {
+        return $this->creativity_level / 5;
     }
 
     // =================================

@@ -9,9 +9,17 @@ use App\Http\Requests\StoreCharacterRequest;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Services\CharacterService;
 
 class CharacterApiController extends Controller
 {
+    protected $characterService;
+
+    public function __construct(CharacterService $characterService)
+    {
+        $this->characterService = $characterService;
+    }
+
     public function index()
     {
         // Aquí iría la lógica para listar los chats del usuario autenticado
@@ -59,6 +67,12 @@ class CharacterApiController extends Controller
                 'message' => "Hola, soy {$character->name}. ¿Cómo puedo ayudarte hoy?",
                 'bot_response' => true,
             ]);
+
+            // Generar prompt de configuracion del character
+            $configPrompt = $this->characterService->generateConfigPrompt($character);
+
+            $character->config_prompt = $configPrompt;
+            $character->save();
 
             $responseData = [
                 'success' => true,
