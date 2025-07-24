@@ -3,7 +3,7 @@ import ChatLayout from '@/Layouts/ChatLayout.vue';
 import ChatHeader from '@/Pages/Chat/Header.vue';
 import MessageReceived from '@/Components/Chat/MessageReceived.vue';
 import MessageSent from '@/Components/Chat/MessageSent.vue';
-import { onMounted, defineProps, ref, reactive, nextTick } from 'vue';
+import { onMounted, defineProps, ref, reactive, nextTick, watch } from 'vue';
 // import { useNotifications } from '@/composables/useNotifications';
 
 const props = defineProps({
@@ -27,6 +27,13 @@ const messagesScroll = ref(null);
 
 // const { showNotification } = useNotifications();
 
+// O resetea automáticamente en ciertas condiciones
+watch(() => props.characterId, async(newCharacterId, oldCharacter) => {
+    await getChat();
+
+    // scrollAlFinal();
+})
+
 onMounted(async () => {
 // Si hay una notificación de respuesta, mostrarla
 //   console.log(responseNotification);
@@ -38,7 +45,7 @@ onMounted(async () => {
 
     await getChat();
 
-    scrollAlFinal();
+    // scrollAlFinal();
 
 });
 
@@ -56,6 +63,10 @@ const getChat = async () => {
             chat.value = responseData.chat; // Asignar el personaje del chat
             character.value = responseData.character; // Asignar el personaje del chat
             chatMessages.value = responseData.chatMessages; // Asignar los mensajes del chat
+
+            nextTick(() => {
+                scrollAlFinal(); // Desplazar al final después de cargar los mensajes
+            });
 
             console.log('chatMessages:', chatMessages.value);
         } else {
