@@ -105,31 +105,58 @@ class CharacterApiController extends Controller
     /**
      * Actualizar un personaje existente
      */
-    public function update(Request $request, Character $character)
+    public function update(StoreCharacterRequest $request, $characterId)
     {
+        try {
+            $responseData = $this->characterService->update($characterId, $request->validated());
+
+            return response()->json($responseData, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el personaje',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor',
+            ], 500);
+        }
+
         // Verificar que el usuario sea el propietario del personaje
-        if ($character->user_id !== auth()->id()) {
-            abort(403);
+        // if ($character->user_id !== auth()->id()) {
+        //     abort(403);
+        // }
+
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'description' => 'required|string',
+        //     'personality' => 'required|string',
+        //     'avatar' => 'nullable|image|max:2048',
+        // ]);
+
+        // $character->update([
+        //     'name' => $request->name,
+        //     'description' => $request->description,
+        //     'personality' => $request->personality,
+        // ]);
+
+        // if ($request->hasFile('avatar')) {
+        //     $character->avatar = $request->file('avatar')->store('avatars', 'public');
+        //     $character->save();
+        // }
+
+        // return redirect()->route('dashboard')->with('success', 'Personaje actualizado exitosamente');
+    }
+
+    public function show($characterId)
+    {
+        try {
+            $responseData = $this->characterService->show($characterId);
+
+            return response()->json($responseData, 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el personaje',
+                'error' => config('app.debug') ? $th->getMessage() : 'Error interno del servidor',
+            ], 500);
         }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'personality' => 'required|string',
-            'avatar' => 'nullable|image|max:2048',
-        ]);
-
-        $character->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'personality' => $request->personality,
-        ]);
-
-        if ($request->hasFile('avatar')) {
-            $character->avatar = $request->file('avatar')->store('avatars', 'public');
-            $character->save();
-        }
-
-        return redirect()->route('dashboard')->with('success', 'Personaje actualizado exitosamente');
     }
 }

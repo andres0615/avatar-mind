@@ -1,5 +1,6 @@
 <script setup>
 import ChatLayout from '@/Layouts/ChatLayout.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import ChatHeader from '@/Pages/Chat/Header.vue';
 import MessageReceived from '@/Components/Chat/MessageReceived.vue';
 import MessageSent from '@/Components/Chat/MessageSent.vue';
@@ -30,8 +31,6 @@ const messagesScroll = ref(null);
 // O resetea automáticamente en ciertas condiciones
 watch(() => props.characterId, async(newCharacterId, oldCharacter) => {
     await getChat();
-
-    // scrollAlFinal();
 })
 
 onMounted(async () => {
@@ -171,7 +170,7 @@ const scrollAlFinal = async () => {
 </script>
 
 <template>
-    <ChatLayout>
+    <AuthenticatedLayout>
         <main class="flex-1 flex flex-col bg-white">
             <ChatHeader :character="character.value" />
 
@@ -232,5 +231,5 @@ const scrollAlFinal = async () => {
                 </div>
             </div>
         </main>
-    </ChatLayout>
+    </AuthenticatedLayout>
 </template>

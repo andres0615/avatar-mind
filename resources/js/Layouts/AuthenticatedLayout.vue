@@ -10,6 +10,20 @@ import Sidebar from '@/Components/Sidebar/Sidebar.vue';
 import NotificationMessage from '@/Components/Layout/NotificationMessage.vue';
 
 // const showingNavigationDropdown = ref(false);
+
+function layoutType() {
+    let layoutType = 'default';
+
+    // si la ruta coincide con 'chat' devuelve 'chat', de lo contrario devuelve 'default'
+    if (route().current('chat.*')) {
+        layoutType = 'chat';
+    }
+
+    console.log('Layout type:', layoutType);
+
+    return layoutType; // or 'authenticated' based on your logic
+}
+
 </script>
 
 <template>
@@ -18,8 +32,11 @@ import NotificationMessage from '@/Components/Layout/NotificationMessage.vue';
     <div class="flex h-screen">
         <Sidebar/>
 
+        <template v-if="layoutType() === 'chat'">
+            <slot/>
+        </template>
         <!-- Main Content -->
-        <main class="flex-1 overflow-auto">
+        <main class="flex-1 overflow-auto" v-else>
             <div class="max-w-4xl mx-auto p-8">
                 <slot/>               
             </div>

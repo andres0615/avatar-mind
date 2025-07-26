@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 class CharacterService
 {
     /**
      * El modelo que maneja este servicio
+     * @var Builder|Character
      */
     protected $characterModel;
 
@@ -62,5 +64,51 @@ class CharacterService
         Log::info($configPrompt);
 
         return $configPrompt;
+    }
+
+    public function update($characterId, array $data)
+    {
+        // Buscar el personaje por ID
+        $character = $this->characterModel->find($characterId);
+
+        if (!$character) {
+            throw new Exception('Character not found');
+        }
+
+        // Actualizar los atributos del personaje
+        $character->fill($data);
+
+        // Guardar los cambios en la base de datos
+        $character->save();
+
+        $chat = $character->chat;
+
+        $responseData = [
+            'success' => true,
+            'message' => 'Personaje actualizado exitosamente',
+            'data' => [
+                'character' => $character->load('user'),
+                'chat' => $chat, // Incluir el chat creado
+            ]
+        ];
+
+        return $responseData;
+    }
+
+    public function show($characterId)
+    {
+        $character = $this->characterModel->findOrFail($characterId);
+        $chat = $character->chat;
+
+        $responseData = [
+            'success' => true,
+            'message' => 'Personaje obtenido exitosamente',
+            'data' => [
+                'character' => $character->load('user'),
+                'chat' => $chat, // Incluir el chat creado
+            ]
+        ];
+
+        return $responseData;
     }
 }

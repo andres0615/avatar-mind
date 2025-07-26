@@ -1,6 +1,6 @@
 <script setup>
-import { Link, router } from '@inertiajs/vue3';
-import { onMounted, defineProps, ref, reactive, nextTick } from 'vue';
+import { Link, router, useRemember } from '@inertiajs/vue3';
+import { onMounted, defineProps, ref, reactive, nextTick, watch } from 'vue';
 
 const characters = ref([]);
 const allCharacters = ref([]);
@@ -9,9 +9,35 @@ const filters = reactive({
     name: '',
 });
 
+// const { value:filters } = useRemember(
+//     { name: '' }, 
+//     'global:recent-chats-filters',
+//     {
+//         storage: window.sessionStorage
+//     }
+// );
+// const { value:filters } = useRemember({ name: '' }, 'app.recent-chats-filters');
+
+watch(() => filters.name, () => {
+    localStorage.setItem('charactersFilters', JSON.stringify(filters));
+    console.log('Filters saved:', filters);
+})
+
 onMounted(async () => {
+    getSavedFilters();
     await getRecentChats();
 });
+
+function getSavedFilters() {
+    let item = localStorage.getItem('charactersFilters');
+    let savedFilters = JSON.parse(item);
+
+    filters.name = savedFilters?.name || '';
+
+    console.log('Saved filters:', savedFilters);
+
+    console.log('filters:', filters);
+}
 
 const getRecentChats = async () => {
     try {
@@ -25,8 +51,9 @@ const getRecentChats = async () => {
             console.log('Recent chats obtained:', responseData);
             // Aquí puedes manejar los datos obtenidos, por ejemplo, guardarlos en una variable reactiva
 
-            characters.value = responseData.characters;
             allCharacters.value = responseData.characters;
+            // characters.value = responseData.characters;
+            filterCharacters();
         } else {
             console.error('Error fetching recent chats:', message);
         }

@@ -16,6 +16,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Listar chats
     Route::get('/character', [CharacterApiController::class, 'index'])->name('api.character.index');
 
+    // Editar personaje
+    Route::get('/character/{characterId}', [CharacterApiController::class, 'show'])->name('api.character.show');
+
     // Crear personaje
     Route::post('/character', [CharacterApiController::class, 'store'])->name('api.character.store');
     

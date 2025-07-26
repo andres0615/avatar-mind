@@ -197,7 +197,7 @@ onMounted(() => {
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categoría *</label>
                         <select 
                             v-model="form.category"
                             class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -217,7 +217,7 @@ onMounted(() => {
                 </div>
 
                 <div class="mt-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tagline/Descripción corta (100 caracteres max)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tagline/Descripción corta (100 caracteres max) *</label>
                     <input 
                         type="text" 
                         v-model="form.tagline"
