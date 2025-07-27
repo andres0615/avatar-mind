@@ -15,7 +15,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 <h2 class="text-xl font-semibold text-gray-900 mb-6">Información Personal</h2>
 
                 <div class="space-y-6">
-                    <div class="flex items-center space-x-6">
+                    <!-- <div class="flex items-center space-x-6">
                         <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -25,9 +25,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <button class="px-4 py-2 text-sm text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">Cambiar foto</button>
                             <p class="text-xs text-gray-500 mt-1">JPG, PNG o GIF. Máximo 2MB.</p>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de usuario</label>
                             <input type="text" value="usuario123" disabled class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed">
@@ -38,18 +38,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nombre para mostrar</label>
                             <input type="text" value="Usuario" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
-                    </div>
+                    </div> -->
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <div class="flex items-center space-x-3">
                             <input type="email" value="usuario@ejemplo.com" class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <!-- <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
                                 Verificado
-                            </span>
+                            </span> -->
                         </div>
                     </div>
 
