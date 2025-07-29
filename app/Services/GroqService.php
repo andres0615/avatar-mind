@@ -32,28 +32,50 @@ class GroqService
 
     public function generateBotResponse(ChatMessage $userMessage)
     {
-        $prompt = $userMessage->message;
+        // $prompt = $userMessage->message;
 
         $chat = $userMessage->chat;
 
         $character = $chat->character;
-        $maxTokens = $character->max_tokens + 50; // Añadir un margen de seguridad de 50 tokens
+        // $maxTokens = $character->max_tokens + 50; // Añadir un margen de seguridad de 50 tokens
+        $maxTokens = 1000;
 
-        $systemConfigMessage = new SystemMessage($character->config_prompt);
+        // $systemConfigMessage = new SystemMessage($character->config_prompt);
 
         /** @var Collection $chatMessages */
         $chatMessages = $chat->messages;        
 
         // hacer un map de la variable $chatMessages
         $chatMessages = $chatMessages->map(function ($message) {
-            if($message->bot_response){
-                return new AssistantMessage($message->message);
-            } else {
-                return new UserMessage($message->message);
+            switch ($message->type) {
+                case 'system':
+                    return new SystemMessage($message->message);
+                    break;
+
+                case 'assistant':
+                    return new AssistantMessage($message->message);
+                    break;
+
+                case 'user':
+                    return new UserMessage($message->message);
+                    break;
+                
+                default:
+                    return new SystemMessage($message->message);
+                    break;
             }
-        })
-        ->unshift($systemConfigMessage)
-        ->toArray();
+
+            // if($message->bot_response){
+            //     return new AssistantMessage($message->message);
+            // } else {
+            //     return new UserMessage($message->message);
+            // }
+        });
+
+        // $chatMessages->unshift($systemConfigMessage);
+        // $chatMessages->push($systemConfigMessage);
+
+        $chatMessages = $chatMessages->toArray();
 
         Log::info('$chatMessages');
         Log::info($chatMessages);

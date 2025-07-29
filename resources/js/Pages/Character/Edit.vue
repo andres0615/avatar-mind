@@ -7,13 +7,13 @@ const props = defineProps({
         required: true
     }
 });
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch, reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { useNotifications } from '@/composables/useNotifications';
 
 // Datos reactivos del formulario
-const form = ref({
+const form = reactive({
     name: '',
     category: '',
     tagline: '',
@@ -46,6 +46,10 @@ const interestsField = ref(null);
 
 const { showNotification } = useNotifications();
 
+watch(() => form.creativity_level, (newValue) => {
+    creativityValue.value = newValue;
+})
+
 onMounted(() => {
     addListeners();
 
@@ -65,7 +69,9 @@ async function getCharacter()
 
         if(success){
             console.log('Character obtained:', responseData);
-            form.value = responseData.character;
+            // form = responseData.character;
+            Object.assign(form, responseData.character);
+            console.log('Form data after assignment:', form);
         } else {
             console.error('Error al obtener el character:', message);
         }
@@ -77,17 +83,17 @@ async function getCharacter()
 
 // Agregar interés
 const addInterest = () => {
-    if (interestsInput.value.trim() && !interests.value.includes(interestsInput.value.trim())) {
-        interests.value.push(interestsInput.value.trim());
-        form.value.interests = interests.value;
+    if (interestsInput.value.trim() && !form.interests.includes(interestsInput.value.trim())) {
+        console.log('Intereses antes de actualizar:', form.interests);
+        form.interests.push(interestsInput.value.trim());
+        console.log('Intereses actualizados:', form.interests);
         interestsInput.value = '';
     }
 };
 
 // Remover interés
 const removeInterest = (index) => {
-    interests.value.splice(index, 1);
-    form.value.interests = interests.value;
+    form.interests.splice(index, 1);
 };
 
 // Manejar envío del formulario
@@ -99,9 +105,9 @@ const handleSubmit = async () => {
 
         let config = {};
 
-        let requestUrl = route('api.character.store');
+        let requestUrl = route('api.character.update', { characterId: props.characterId });
 
-        const response = await axios.post(requestUrl, form.value, config);
+        const response = await axios.put(requestUrl, form, config);
 
         let { success, message, data } = response.data;
         let { character, chat } = data || {};
@@ -110,7 +116,7 @@ const handleSubmit = async () => {
             console.log(response);
 
             let characterId = character.id;
-            console.log('Personaje creado con ID:', characterId);
+            console.log('Personaje actualizado ID:', characterId);
 
             // Mostrar notificación de éxito
             showNotification(message, 'success');
@@ -179,10 +185,11 @@ const focusFirstErrorField = () => {
 };
 
 // Actualizar valor del slider
-const updateCreativity = (event) => {
-    creativityValue.value = event.target.value;
-    form.value.creativity_level = parseInt(event.target.value);
-};
+// const updateCreativity = (event) => {
+//     console.log('Slider value changed:', event.target.value);
+//     creativityValue.value = event.target.value;
+//     form.creativity_level = parseInt(event.target.value);
+// };
 
 // Manejar tecla Enter en el input de intereses
 const handleInterestKeydown = (event) => {
@@ -309,7 +316,7 @@ function addListeners() {
 
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Descripción de personalidad (2000 caracteres max)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Descripción de personalidad (800 caracteres max)</label>
                         <textarea 
                             rows="5" 
                             v-model="form.personality_description"
@@ -354,7 +361,7 @@ function addListeners() {
                         <label class="block text-sm font-medium text-gray-700 mb-2">Intereses/Hobbies</label>
                         <div class="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-lg min-h-12" 
                              :class="{ 'border-red-500': errors.interests }">
-                            <span v-for="(interest, index) in interests" :key="index" 
+                            <span v-for="(interest, index) in form.interests" :key="index" 
                                   class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
                                 {{ interest }}
                                 <button type="button" @click="removeInterest(index)" 
@@ -391,8 +398,7 @@ function addListeners() {
                             type="range" 
                             min="1" 
                             max="10" 
-                            v-model="creativityValue"
-                            @input="updateCreativity"
+                            v-model="form.creativity_level"
                             class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider" 
                             id="creativity-slider"
                         >
@@ -402,7 +408,7 @@ function addListeners() {
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <label class="block text-sm font-medium text-gray-700 mb-3">Longitud de respuestas</label>
                         <div class="flex space-x-4">
                             <label class="flex items-center space-x-2 cursor-pointer">
@@ -418,7 +424,7 @@ function addListeners() {
                                 <span class="text-sm text-gray-700">Larga</span>
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

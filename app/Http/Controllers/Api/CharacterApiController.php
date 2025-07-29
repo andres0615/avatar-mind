@@ -71,16 +71,22 @@ class CharacterApiController extends Controller
 
             // Crear un chat asociado al personaje
             $chat = $character->chat()->create();
-            $chatMessage = $chat->messages()->create([
-                'message' => "Hola, soy {$character->name}. ¿Cómo puedo ayudarte hoy?",
-                'bot_response' => true,
-            ]);
 
             // Generar prompt de configuracion del character
             $configPrompt = $this->characterService->generateConfigPrompt($character);
 
-            $character->config_prompt = $configPrompt;
-            $character->save();
+            // $character->config_prompt = $configPrompt;
+            // $character->save();
+
+            $chatMessageConfig = $chat->messages()->create([
+                'message' => $configPrompt,
+                'type' => 'system'
+            ]);
+
+            $chatMessageAssistant = $chat->messages()->create([
+                'message' => "Hola, soy {$character->name}. ¿Cómo puedo ayudarte hoy?",
+                'type' => 'assistant'
+            ]);
 
             $responseData = [
                 'success' => true,

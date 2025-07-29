@@ -67,4 +67,9 @@ class Chat extends Model
         // // Calcular el tiempo transcurrido desde el último mensaje
         // ->selectRaw("TIMESTAMPDIFF(SECOND, created_at, NOW()) as time_ago");
     }
+
+    public function lastSystemMessage()
+    {
+        return $this->messages()->system()->latest()->first();
+    }
 }

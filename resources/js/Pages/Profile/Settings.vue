@@ -44,16 +44,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <div class="flex items-center space-x-3">
                             <input type="email" value="usuario@ejemplo.com" class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <!-- <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
                                 Verificado
-                            </span> -->
+                            </span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de nacimiento</label>
                             <input type="date" value="1995-06-15" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -63,7 +63,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <label class="block text-sm font-medium text-gray-700 mb-2">Ubicación (opcional)</label>
                             <input type="text" value="Madrid, España" class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Ciudad, País">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

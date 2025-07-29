@@ -264,7 +264,7 @@ onMounted(() => {
 
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Descripción de personalidad (2000 caracteres max)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Descripción de personalidad (800 caracteres max)</label>
                         <textarea 
                             rows="5" 
                             v-model="form.personality_description"
@@ -357,7 +357,7 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <label class="block text-sm font-medium text-gray-700 mb-3">Longitud de respuestas</label>
                         <div class="flex space-x-4">
                             <label class="flex items-center space-x-2 cursor-pointer">
@@ -373,7 +373,7 @@ onMounted(() => {
                                 <span class="text-sm text-gray-700">Larga</span>
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

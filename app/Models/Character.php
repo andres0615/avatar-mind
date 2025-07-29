@@ -58,15 +58,19 @@ class Character extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'interests' => 'array',
-            'creativity_level' => 'integer',
-        ];
-    }
+    // protected function casts(): array
+    // {
+    //     return [
+    //         'interests' => 'array',
+    //         'creativity_level' => 'integer',
+    //     ];
+    // }
 
-    protected $appends = ['max_tokens', 'temperature'];
+    protected $appends = [
+        'max_tokens', 
+        'temperature',
+        'interests_string'
+    ];
 
     // =================================
     // RELACIONES
@@ -131,10 +135,10 @@ class Character extends Model
     /**
      * Get the character's interests as comma-separated string.
      */
-    public function getInterestsStringAttribute(): string
+    public function getInterestsStringAttribute()
     {
         if (!$this->interests || empty($this->interests)) {
-            return 'Sin intereses definidos';
+            return null;
         }
         
         return implode(', ', $this->interests);
@@ -157,6 +161,11 @@ class Character extends Model
     public function getTemperatureAttribute(): int
     {
         return $this->creativity_level / 5;
+    }
+
+    public function getInterestsAttribute()
+    {
+        return ($this->attributes['interests']) ? json_decode($this->attributes['interests']) : [];
     }
 
     // =================================

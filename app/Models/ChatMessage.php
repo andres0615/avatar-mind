@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Services\GroqService;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class ChatMessage extends Model
 {
@@ -31,6 +31,7 @@ class ChatMessage extends Model
         'bot_response',
         'message',
         'time_ago',
+        'type'
     ];
 
     /**
@@ -45,6 +46,11 @@ class ChatMessage extends Model
     ];
 
     protected $appends = ['time_ago']; // Para que aparezca en toArray()/toJson()
+
+    public function scopeSystem(Builder $query)
+    {
+        return $query->where('type', 'system');
+    }
 
     // =================================
     // RELACIONES
@@ -71,9 +77,11 @@ class ChatMessage extends Model
     public function storeUserMessage($chatId, $requestData)
     {
         // Crear el nuevo mensaje de chat del usuario
+        /** @var self $newMessage */
         $newMessage = self::create([
             'chat_id' => $chatId,
             'message' => $requestData['message'],
+            'type' => 'user'
         ]);
 
         // generar respuesta del bot
@@ -103,7 +111,7 @@ class ChatMessage extends Model
         // Log::info($chat);
 
         $botMessage = $chat->messages()->create([
-            'bot_response' => true,
+            'type' => 'assistant',
             'message' => $botResponse,
         ]);
 

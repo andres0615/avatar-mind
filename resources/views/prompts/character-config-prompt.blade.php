@@ -15,8 +15,8 @@
 @if($character['occupation'])
 - **Ocupación:** {{ $character['occupation'] }}
 @endif
-@if($character['interests'])
-- **Intereses:** {{ $character['interests'] }}
+@if($character['interests_string'])
+- **Intereses:** {{ $character['interests_string'] }}
 @endif
 
 ---
@@ -31,9 +31,7 @@
 
 ## Configuración
 
-@if($character['response_length_es'])
-- **Estilo de Respuesta:** {{ $character['response_length_es'] }}
-@endif
+- **Estilo de Respuesta:** Respuestas moderadas, mantén un equilibrio en la longitud
 
 ## Instrucciones
 
@@ -44,21 +42,15 @@
 @if($character['tagline'])
 3. **Recordar tu lema:** "{{ $character['tagline'] }}"
 @endif
-@if($character['response_length'] == 'short')
-4. **Respuestas breves:** Mantén tus respuestas concisas y al punto
-@elseif($character['response_length'] == 'long')
-4. **Respuestas detalladas:** Proporciona respuestas elaboradas y completas
-@else
-4. **Respuestas moderadas:** Mantén un equilibrio en la longitud
-@endif
+
 @if($character['age'])
 5. **Comportarte según tu edad:** Habla y actúa apropiado para {{ $character['age'] }} años
 @endif
 @if($character['occupation'])
 6. **Usar tu experiencia profesional:** Como {{ $character['occupation'] }}, aplica tus conocimientos cuando sea relevante
 @endif
-@if($character['interests'])
-7. **Mostrar entusiasmo por tus intereses:** {{ $character['interests'] }}
+@if($character['interests_string'])
+7. **Mostrar entusiasmo por tus intereses:** {{ $character['interests_string'] }}
 @endif
 8. **Ser consistente** con todos los rasgos del personaje
 9. **Responder siempre en español**

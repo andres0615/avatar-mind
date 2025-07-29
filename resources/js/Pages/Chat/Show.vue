@@ -97,7 +97,7 @@ const sendMessage = async (event) => {
 
         let newUserMessage = {
             message: userMessage.value,
-            bot_response: false,
+            type: 'user',
             created_at: currentTime,
         };
 
@@ -135,7 +135,7 @@ const sendMessage = async (event) => {
 
             let newBotMessage = {
                 message: botResponse.message,
-                bot_response: true,
+                type: 'assistant',
                 created_at: botResponse.created_at
             };
 
@@ -186,12 +186,12 @@ const scrollAlFinal = async () => {
                 <template v-for="(chatMessage, index) in chatMessages" :key="index">
 
                     <MessageReceived 
-                    v-if="chatMessage.bot_response" 
+                    v-if="chatMessage.type == 'assistant'" 
                     :message="chatMessage.message" 
                     :date="chatMessage.created_at"
                     :character="character.value" />
 
-                    <MessageSent v-else 
+                    <MessageSent v-else-if="chatMessage.type == 'user'"
                     :message="chatMessage.message" 
                     :date="chatMessage.created_at" />
 

@@ -33,24 +33,26 @@ class CharacterService
         Log::info('$character');
         Log::info($character);
 
-        if($character['interests']){
-            $character['interests'] = implode(', ', $character['interests']);            
-        }
+        // if($character['interests']){
+        //     $character['interests'] = implode(', ', $character['interests']);            
+        // }
 
         // Un switch para la variable $character['response_length_es'], con los valores 'short', 'medium' y 'long'
-        switch ($character['response_length']) {
-            case 'short':
-                $character['response_length_es'] = 'Respuestas cortas, con una longiutd maxima de ' . $character['max_tokens'] . ' tokens.';
-                break;
-            case 'medium':
-                $character['response_length_es'] = 'Respuestas medianas, con una longiutd maxima de ' . $character['max_tokens'] . ' tokens.';
-                break;
-            case 'long':
-                $character['response_length_es'] = 'Respuestas largas, con una longiutd maxima de ' . $character['max_tokens'] . ' tokens.';
-                break;
-            default:
-                break;
-        }
+        // switch ($character['response_length']) {
+        //     case 'short':
+        //         $character['response_length_es'] = 'Respuestas cortas, entre 50 y 100 caracteres.';
+        //         break;
+        //     case 'medium':
+        //         $character['response_length_es'] = 'Respuestas medianas, entre 300 y 400 caracteres.';
+        //         break;
+        //     case 'long':
+        //         $character['response_length_es'] = 'Respuestas largas';
+        //         break;
+        //     default:
+        //         break;
+        // }
+
+        // $character['response_length_es'] .= ', con una longiutd minima de ' . $character['max_tokens'] - 50 . ' tokens, y maxima de ' . $character['max_tokens'] . ' tokens.';
 
         // Generar un prompt de configuración basado en los atributos del personaje
         $configPrompt = view('prompts.character-config-prompt', compact('character'))->render();
@@ -77,9 +79,36 @@ class CharacterService
 
         // Actualizar los atributos del personaje
         $character->fill($data);
+        $character->save();
+
+        // Hacer un log de character
+        Log::info('Character update data:');
+        Log::info($data);
+        Log::info('Character updated:');
+        Log::info($character);
+
+        $configPrompt = "Olvida tu configuracion y personalidad anterior, apartir de ahora tu configuracion y personalidad sera la siguiente: \n\n";
+
+        // Generar prompt de configuracion del character
+        $configPrompt .= $this->generateConfigPrompt($character);
+
+        $lastSystemMessage = $character->chat->lastSystemMessage();
+
+        Log::info('$lastSystemMessage');
+        Log::info($lastSystemMessage);
+
+        if($configPrompt !== $lastSystemMessage->message){
+            Log::info('Nuevo system message creado');
+            $newSystemMessage = $character->chat->messages()->create([
+                'message' => $configPrompt,
+                'type' => 'system'
+            ]);
+        }
+
+        // $character->config_prompt = $configPrompt;
 
         // Guardar los cambios en la base de datos
-        $character->save();
+        // $character->save();
 
         $chat = $character->chat;
 
