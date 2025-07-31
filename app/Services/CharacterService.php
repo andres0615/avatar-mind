@@ -140,4 +140,18 @@ class CharacterService
 
         return $responseData;
     }
+
+    public function destroy($characterId)
+    {
+        $character = $this->characterModel->findOrFail($characterId);
+        $character->delete();
+
+        $responseData = [
+            'success' => true,
+            'message' => 'Personaje eliminado exitosamente',
+            'data' => []
+        ];
+
+        return $responseData;
+    }
 }

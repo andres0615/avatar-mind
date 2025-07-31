@@ -32,6 +32,8 @@ class ChatApiController extends Controller
             'is_from_user' => true,
         ]);
 
+        sleep(2);
+
         // Aquí puedes agregar la lógica para generar la respuesta del personaje
         // Por ejemplo, usando una API de IA o lógica personalizada
         $characterResponse = $this->generateCharacterResponse($character, $request->message);

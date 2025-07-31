@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\ProfileApiController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->name('user')->middleware('auth:sanctum');
 
 // Rutas API con autenticación
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -24,6 +24,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Editar personaje
     Route::put('/character/{characterId}', [CharacterApiController::class, 'update'])->name('api.character.update');
+
+    // crear ruta para eliminar character
+    Route::delete('/character/{characterId}', [CharacterApiController::class, 'destroy'])->name('api.character.destroy');
     
     // Crear chat
     // Route::post('/chat/{characterId}', [ChatApiController::class, 'store'])->name('api.chat.store');

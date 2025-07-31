@@ -211,6 +211,42 @@ function addListeners() {
         });
     }
 }
+
+async function deleteCharacter() {
+    try {
+        // mostrar mensaje de confirmacion
+        const confirmation = confirm('¿Estás seguro de que deseas eliminar este personaje?');
+
+        if (confirmation) {
+
+            let config = {};
+
+            let requestUrl = route('api.character.destroy',{ characterId: props.characterId });
+
+            const response = await axios.delete(requestUrl, config);
+            let { success, message, data: responseData } = response.data;
+
+            if (success) {
+                // Mostrar notificación de éxito
+                showNotification(message, 'success');
+
+                let redirectUrl = route('settings');
+                console.log('Redirigiendo a:', redirectUrl);
+
+                // Redirigir al dashboard o página de characters
+                router.visit(redirectUrl, {
+                    preserveState: true
+                });
+            } else {
+                console.error('Error al eliminar el character:', error);
+            }
+        }
+
+    } catch (error) {
+        console.error('Error al eliminar el character:', error);
+    }
+}
+
 </script>
 
 <template>
@@ -221,7 +257,9 @@ function addListeners() {
                 <p class="text-lg text-gray-600">Modifica las características de tu personaje</p>
             </div>
 
-            <button class="flex items-center space-x-2 px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+            <button 
+            class="flex items-center space-x-2 px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+            @click.prevent="deleteCharacter()">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
@@ -430,7 +468,10 @@ function addListeners() {
 
             <!-- Botones de acción -->
             <div class="flex justify-between">
-                <button type="button" class="flex items-center space-x-2 px-6 py-3 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                <button 
+                type="button" 
+                class="flex items-center space-x-2 px-6 py-3 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+                @click.prevent="deleteCharacter()">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
@@ -440,7 +481,7 @@ function addListeners() {
                 <div class="flex space-x-4">
                     <button 
                         type="button" 
-                        @click="$inertia.visit('/dashboard')"
+                        @click="$inertia.visit(route('chat.show', { characterId: props.characterId }))"
                         class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                         Cancelar

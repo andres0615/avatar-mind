@@ -4,6 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import ChatHeader from '@/Pages/Chat/Header.vue';
 import MessageReceived from '@/Components/Chat/MessageReceived.vue';
 import MessageSent from '@/Components/Chat/MessageSent.vue';
+import Thinking from '@/Components/Chat/Thinking.vue';
 import { onMounted, defineProps, ref, reactive, nextTick, watch } from 'vue';
 // import { useNotifications } from '@/composables/useNotifications';
 
@@ -23,6 +24,8 @@ const character = reactive({});
 const chatMessages = ref([]);
 
 const messagesScroll = ref(null);
+
+const showThinking = ref(false);
 
 // const { responseNotification } = props;
 
@@ -83,6 +86,10 @@ const sendMessage = async (event) => {
         return; // Permitir nueva línea con Shift+Enter
     }
 
+    showThinking.value = true;
+
+    // Esperar a que se carguen los mensajes antes de enviar el mensaje
+
     if (!userMessage.value.trim()) {
         console.warn('El mensaje está vacío');
         return; // No enviar mensajes vacíos
@@ -123,6 +130,8 @@ const sendMessage = async (event) => {
         let { success, message, data: responseData } = response.data;
 
         if (success) {
+
+            showThinking.value = false;
 
             console.log('responseData: ', responseData);
 
@@ -195,9 +204,10 @@ const scrollAlFinal = async () => {
                     :message="chatMessage.message" 
                     :date="chatMessage.created_at" />
 
-                    <!-- Componente thinking -->
-
                 </template>
+
+                <!-- Componente thinking -->
+                <Thinking v-if="showThinking" />
             </div>
 
             <!-- Área de Entrada -->
@@ -213,7 +223,7 @@ const scrollAlFinal = async () => {
                             style="min-height: 3rem; max-height: 8rem;"
                             v-model="userMessage"
                             @keyup.enter="sendMessage($event)"></textarea>
-                            <div class="absolute bottom-2 right-2 text-xs text-gray-400" id="char-counter">0/2000</div>
+                            <div class="absolute bottom-2 right-2 text-xs text-gray-400" id="char-counter">0/800</div>
                         </div>
                     </div>
                     <button 

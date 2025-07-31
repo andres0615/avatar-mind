@@ -165,4 +165,19 @@ class CharacterApiController extends Controller
             ], 500);
         }
     }
+
+    public function destroy($characterId)
+    {
+        try {
+            $responseData = $this->characterService->destroy($characterId);
+
+            return response()->json($responseData, 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar el personaje',
+                'error' => config('app.debug') ? $th->getMessage() : 'Error interno del servidor',
+            ], 500);
+        }
+    }
 }
