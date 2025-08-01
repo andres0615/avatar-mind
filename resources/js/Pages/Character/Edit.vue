@@ -279,7 +279,7 @@ async function deleteCharacter() {
                             type="text" 
                             v-model="form.name"
                             class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                            placeholder="Ej: Naruto Uzumaki"
+                            placeholder="Ej: Harry Potter"
                             :class="{ 'border-red-500': errors.name }"
                             ref="nameField"
                         >
@@ -387,7 +387,7 @@ async function deleteCharacter() {
                                 type="text" 
                                 v-model="form.occupation"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                placeholder="Ej: Ninja"
+                                placeholder="Ej: Estudiante"
                                 :class="{ 'border-red-500': errors.occupation }"
                                 ref="occupationField"
                             >

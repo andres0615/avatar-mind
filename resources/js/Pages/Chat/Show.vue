@@ -27,6 +27,8 @@ const messagesScroll = ref(null);
 
 const showThinking = ref(false);
 
+const countChars = ref(0);
+
 // const { responseNotification } = props;
 
 // const { showNotification } = useNotifications();
@@ -176,6 +178,12 @@ const scrollAlFinal = async () => {
     el.scrollTop = el.scrollHeight;
 }
 
+const updateLeftChars = async (event) => {
+    // calcular cuantos caracteres quedan
+    countChars.value = userMessage.value.length;
+    // console.log('countChars:', countChars.value);
+}
+
 </script>
 
 <template>
@@ -222,8 +230,9 @@ const scrollAlFinal = async () => {
                             id="message-input" 
                             style="min-height: 3rem; max-height: 8rem;"
                             v-model="userMessage"
+                            @input="updateLeftChars($event)"
                             @keyup.enter="sendMessage($event)"></textarea>
-                            <div class="absolute bottom-2 right-2 text-xs text-gray-400" id="char-counter">0/800</div>
+                            <div class="absolute bottom-2 right-2 text-xs text-gray-400" id="char-counter">{{ countChars }}/800</div>
                         </div>
                     </div>
                     <button 

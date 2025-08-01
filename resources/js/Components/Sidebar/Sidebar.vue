@@ -7,7 +7,7 @@ import Logout from '@/Components/Sidebar/Logout.vue';
 
 <template>
     <!-- Sidebar -->
-        <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div class="w-72 bg-white border-r border-gray-200 flex flex-col">
             <UserSection />
             
             <Navigation />
