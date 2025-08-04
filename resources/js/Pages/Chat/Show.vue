@@ -127,6 +127,8 @@ const sendMessage = async (event) => {
             scrollAlFinal(); // Desplazar al final después de agregar el nuevo mensaje
         });
 
+        updateLeftChars();
+
         const response = await axios.post(requestUrl, requestData, config);
 
         let { success, message, data: responseData } = response.data;

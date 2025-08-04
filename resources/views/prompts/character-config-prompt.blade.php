@@ -31,7 +31,7 @@
 
 ## Configuración
 
-- **Estilo de Respuesta:** Respuestas moderadas, mantén un equilibrio en la longitud
+- **Estilo de Respuesta:** Respuestas moderadas, mantén un equilibrio en la longitud, manten tus respuestas con una longitud maxima de 2 parrafos.
 
 ## Instrucciones
 

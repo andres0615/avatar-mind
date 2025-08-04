@@ -299,6 +299,7 @@ async function deleteCharacter() {
                             <option value="Videojuegos">Videojuegos</option>
                             <option value="Películas">Películas</option>
                             <option value="Libros">Libros</option>
+                            <option value="Comic">Comics</option>
                             <option value="Histórico">Histórico</option>
                             <option value="Original">Original</option>
                         </select>

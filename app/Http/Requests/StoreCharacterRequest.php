@@ -23,7 +23,7 @@ class StoreCharacterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'category' => 'required|in:Anime,Videojuegos,Películas,Libros,Histórico,Original',
+            'category' => 'required|in:Anime,Videojuegos,Películas,Libros,Comic,Histórico,Original',
             'tagline' => 'required|string|max:100',
             'visibility' => 'nullable|in:public,private,friends',
             'personality_description' => 'nullable|string|max:2000',
