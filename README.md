@@ -27,8 +27,6 @@ Construido con **Laravel 11**, **Vue.js 3**, **MySQL**, **Tailwind CSS** y poten
 
 </p>
 
-[![Ver Repositorio](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/andres0615/avatar-mind)
-&nbsp;&nbsp;
 ![Laravel v11](https://img.shields.io/badge/laravel-v11-blue?logo=laravel)
 &nbsp;&nbsp;
 ![Vue.js v3](https://img.shields.io/badge/vue.js-v3-blue?logo=vue.js)
