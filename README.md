@@ -36,3 +36,45 @@ Construido con **Laravel 11**, **Vue.js 3**, **MySQL**, **Tailwind CSS** y poten
 </div>
 
 <br>
+
+### Capturas de pantalla
+
+#### Login
+
+![Login](storage/app/screenshots/login.png)
+
+*Figura 1: inicio de sesion.*
+
+#### Chat
+
+![Chat](storage/app/screenshots/chat.png)
+
+*Figura 2: chat con un personaje.*
+
+#### Crear o Editar personaje
+
+![Editar personaje](storage/app/screenshots/crear-editar-personaje-1.png)
+
+*Figura 3: Informacion basica del personaje.*
+
+![Editar personaje](storage/app/screenshots/crear-editar-personaje-2.png)
+
+*Figura 4: Personalidad y transfondo del personaje.*
+
+![Editar personaje](storage/app/screenshots/crear-editar-personaje-3.png)
+
+*Figura 5: Configuracion avanzada del personaje.*
+
+#### Configuracion de perfil
+
+![Configuracion](storage/app/screenshots/configuracion-1.png)
+
+*Figura 6: Configuracion de informacion personal.*
+
+![Configuracion](storage/app/screenshots/configuracion-2.png)
+
+*Figura 7: Configuracion de privacidad y seguridad.*
+
+![Configuracion](storage/app/screenshots/configuracion-3.png)
+
+*Figura 8: Configuracion de la aplicacion.*
