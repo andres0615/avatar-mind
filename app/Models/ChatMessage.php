@@ -74,9 +74,12 @@ class ChatMessage extends Model
         return app(GroqService::class);
     }
 
+    /**
+     * Almacenar un mensaje de chat del usuario y obtener la respuesta del bot
+     */
     public function storeUserMessage($chatId, $requestData)
     {
-        // Crear el nuevo mensaje de chat del usuario
+        // Guardar el nuevo mensaje de chat del usuario en la bd
         /** @var self $newMessage */
         $newMessage = self::create([
             'chat_id' => $chatId,
@@ -102,14 +105,20 @@ class ChatMessage extends Model
         return $responseData;
     }
 
+    /**
+     * Generar respuesta del bot
+     */
     public function generateBotResponse()
     {
+        // Enviar el mensaje al modelo y generar la respuesta del bot
+        // Invocar el servicio creado para interactuar con el proveedor de Groq
         $botResponse = $this->groqService()->generateBotResponse($this);
         // Log::info($botResponse);
 
         $chat = $this->chat;
         // Log::info($chat);
 
+        // Guardar el mensaje de respuesta del bot en la base de datos
         $botMessage = $chat->messages()->create([
             'type' => 'assistant',
             'message' => $botResponse,

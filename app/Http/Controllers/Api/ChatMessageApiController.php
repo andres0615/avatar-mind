@@ -8,11 +8,11 @@ use App\Models\ChatMessage;
 
 class ChatMessageApiController extends Controller
 {
+    /**
+     * Almacenar un mensaje de chat y obtener la respuesta del bot
+     */
     public function store(Request $request, $chatId)
     {
-        // Aquí iría la lógica para almacenar un mensaje de chat
-        // Por ejemplo, validar el request y crear un nuevo mensaje asociado al chat
-
         // Validar los datos del request
         $request->validate([
             'message' => 'required|string|max:65535',
@@ -20,6 +20,7 @@ class ChatMessageApiController extends Controller
 
         $chatMessageModel = new ChatMessage();
 
+        // Almacenar el mensaje del usuario y obtener la respuesta del bot
         $responseData = $chatMessageModel->storeUserMessage($chatId, $request->all());
 
         return response()->json($responseData, 201);
