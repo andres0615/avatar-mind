@@ -21,10 +21,6 @@ class CharacterController extends Controller
      */
     public function edit(int $characterId)
     {
-        // Verificar que el usuario sea el propietario del personaje
-        // if ($character->user_id !== auth()->id()) {
-        //     abort(403);
-        // }
 
         return Inertia::render('Character/Edit', [
             'characterId' => $characterId

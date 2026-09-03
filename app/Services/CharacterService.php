@@ -33,32 +33,10 @@ class CharacterService
         Log::info('$character');
         Log::info($character);
 
-        // if($character['interests']){
-        //     $character['interests'] = implode(', ', $character['interests']);            
-        // }
-
-        // Un switch para la variable $character['response_length_es'], con los valores 'short', 'medium' y 'long'
-        // switch ($character['response_length']) {
-        //     case 'short':
-        //         $character['response_length_es'] = 'Respuestas cortas, entre 50 y 100 caracteres.';
-        //         break;
-        //     case 'medium':
-        //         $character['response_length_es'] = 'Respuestas medianas, entre 300 y 400 caracteres.';
-        //         break;
-        //     case 'long':
-        //         $character['response_length_es'] = 'Respuestas largas';
-        //         break;
-        //     default:
-        //         break;
-        // }
-
-        // $character['response_length_es'] .= ', con una longiutd minima de ' . $character['max_tokens'] - 50 . ' tokens, y maxima de ' . $character['max_tokens'] . ' tokens.';
-
         // Generar un prompt de configuración basado en los atributos del personaje
         $configPrompt = view('prompts.character-config-prompt', compact('character'))->render();
         
         // Limpiar espacios en blanco extra y líneas vacías
-        // $configPrompt = preg_replace('/\n\s*\n\s*\n/', "\n\n", $configPrompt);
         $configPrompt = trim($configPrompt);
 
         // log de la variable $configPrompt

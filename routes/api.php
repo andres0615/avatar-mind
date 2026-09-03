@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/settings', [ProfileApiController::class, 'update'])->name('api.settings.update');
 
     // Crear mensaje de chat
+    // Enviarlo al modelo y obtener respuesta del bot
     Route::post('/chat-message/{chatId}', [ChatMessageApiController::class, 'store'])->name('api.chat_message.store');
 
-    // Route::get('/chat-message/{chatId}', [ChatMessageApiController::class, 'index'])->name('api.chat_message.index');
 });

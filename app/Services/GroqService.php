@@ -40,8 +40,6 @@ class GroqService
         // $maxTokens = $character->max_tokens + 50; // Añadir un margen de seguridad de 50 tokens
         $maxTokens = 1000;
 
-        // $systemConfigMessage = new SystemMessage($character->config_prompt);
-
         /** @var Collection $chatMessages */
         $chatMessages = $chat->messages;        
 
@@ -65,30 +63,18 @@ class GroqService
                     break;
             }
 
-            // if($message->bot_response){
-            //     return new AssistantMessage($message->message);
-            // } else {
-            //     return new UserMessage($message->message);
-            // }
         });
 
-        // $chatMessages->unshift($systemConfigMessage);
-        // $chatMessages->push($systemConfigMessage);
 
         $chatMessages = $chatMessages->toArray();
 
         Log::info('$chatMessages');
         Log::info($chatMessages);
 
-        // Aquí puedes implementar la lógica para generar una respuesta del bot
-        // Por ejemplo, usando una API de IA o lógica personalizada
-
-        // $botResponse = "Hola ya recibi tu mensaje"; // Placeholder
 
         // Via the third parameter of `using()`
         $botResponse = Prism::text()
-            ->using(Provider::Groq, 'meta-llama/llama-4-maverick-17b-128e-instruct')
-            // ->withPrompt($prompt)
+            ->using(Provider::Groq, env('GROQ_MODEL'))
             ->withMessages($chatMessages)
             ->withMaxTokens($maxTokens)
             ->usingTemperature($character->temperature)
@@ -96,7 +82,6 @@ class GroqService
             ->text;
 
         Log::info('$botResponse: ');
-        // Log::info(dump($botResponse->text));
         Log::info($botResponse);
 
         return $botResponse;

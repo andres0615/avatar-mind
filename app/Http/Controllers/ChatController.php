@@ -14,11 +14,6 @@ class ChatController extends Controller
      */
     public function show(Request $request, int $characterId)
     {
-        // Cargar los mensajes del chat para este personaje y usuario
-        // $messages = ChatMessage::where('character_id', $character->id)
-        //     ->where('user_id', auth()->id())
-        //     ->orderBy('created_at', 'asc')
-        //     ->get();
 
         return Inertia::render('Chat/Show', [
             'characterId' => $characterId,
