@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-    <img src="public/images/logotipo-sm-v4-login.png" alt="Git" width="170" title="Git" />
+    <img src="public/images/logotipo-sm-v5.png" alt="Git" width="250" title="Git" />
 </p>
 
 </div>
